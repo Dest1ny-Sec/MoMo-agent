@@ -1,0 +1,72 @@
+# Luvvv-agent Dockerfile ignore
+# 阻止敏感/历史/开发文件进入镜像
+
+# ===== 敏感配置（必须！平台审计会扫到 key 就直接挂） =====
+.env
+.env.*
+!.env.example
+
+# ===== 历史/调试/开发残留 =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ===== 会话/数据/工作区（沙箱冷启动要清空） =====
+workspace/
+staged_state/
+logs/
+metrics/
+第一详细session对话/
+归档.zip
+第一详细session对话.zip
+
+# ===== 本地工具/调试 =====
+.playwright-mcp/
+.claude/
+vpn/
+*.log
+*.tsv
+
+# ===== mock 模式 / 测试脚本 =====
+scripts/mock_bench.py
+scripts/first_run_direct.py
+scripts/fake_hermes.sh
+scripts/pull_kali.sh
+scripts/connect_vpn.sh
+Dockerfile.tools
+docs/
+
+# ===== 其它本机残留 =====
+.staged_state
+.last_run
+.git/
+.gitignore
+*.bak
+*.bak.*
+
+# ===== 镜像导出/构建产物（禁止打进镜像：纯体积）=====
+*.tar.gz
+*.tgz
+# 重构后不再需要 hermes CLI，源码包不进镜像
+hermes-agent.tar.gz
+
+# ===== 构建资源（宿主机 7890 预下载，COPY 进镜像用；构建后可整体删除）=====
+!build-assets/
+!build-assets/**
+
+# ===== 百度 AI Agent 攻防赛题库（带答案，禁止进镜像）=====
+# 理由：responses/ 里有真平台 flag{} 答案，scripts/ 里有自动求解脚本
+# 这些是别的赛/训练数据，**不能**用去打真 TSec 平台（=作弊）
+baidu-agent-attack-defense-main/

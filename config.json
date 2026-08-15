@@ -1,0 +1,73 @@
+{
+  "_说明": "Luvvv-agent 重构后配置。删掉了所有旧架构死键，只留实际读取的。",
+  "platform": {
+    "adapter": "tsec",
+    "tsec": {
+      "base_url": "",
+      "token": "",
+      "timeout": 15,
+      "max_retries": 2
+    }
+  },
+  "benchmark": {
+    "token": "",
+    "base_url": ""
+  },
+  "vpn": {
+    "precheck_url": "http://10.0.100.58"
+  },
+  "flag": {
+    "pattern": "flag\\{[^}\\n]{1,200}\\}",
+    "prefix": "flag{",
+    "suffix": "}",
+    "max_length": 4096
+  },
+  "model": {
+    "provider": "anthropic",
+    "model": "deepseek-v4-flash",
+    "base_url": "",
+    "api_key": "",
+    "max_tokens": 4096,
+    "timeout": 120,
+    "_说明": "base_url/api_key/model 可由环境变量 ANTHROPIC_BASE_URL/ANTHROPIC_AUTH_TOKEN/ANTHROPIC_MODEL 覆盖（托管模式平台注入网关地址）。"
+  },
+  "scheduler": {
+    "max_active": 3,
+    "challenge_order": "all",
+    "hard_timeout_min": 20,
+    "progress_min_wall_min": 0,
+    "progress_grace_min": 0,
+    "max_wrong_submissions": 100,
+    "_hard_timeout_min_说明": "20=每题最多 20 分钟，没解出就关容器保存进度，进重试队列；所有题都尝试过一遍后再第二轮重试（两轮制）",
+    "_progress_说明": "0=关掉进度式回收（只靠 20 分钟硬超时兜底）",
+    "_max_wrong_submissions_说明": "100=放宽瞎猜上限（hard 题需要更多尝试预算）"
+  },
+  "solver": {
+    "max_rounds": 25,
+    "explore_max_turns": 25,
+    "command_timeout_sec": 60,
+    "min_rounds_before_giveup": 4,
+    "worker": "llm",
+    "cli_path": "claude",
+    "explore_timeout": 180,
+    "bootstrap_timeout": 180,
+    "reason_timeout": 90,
+    "conclude_timeout": 60,
+    "max_turns": 20,
+    "reason_max_intents": 4,
+    "explore_parallel": 2,
+    "worker_fallback": true,
+    "explore_turns_by_priority": {
+      "high": 18,
+      "normal": 10,
+      "low": 5
+    },
+    "_explore_turns_说明": "优先级决定 explore 深度：high 18 / normal 10 / low 5。砍半+不再 50 轮跑空。",
+    "_说明_2026-08-12": "worker=llm 走 LLMClient 直连（去掉 claude CLI 套壳层）。具体改动见 knowledge/10-framework-issues.md。",
+    "_worker_说明": "llm=走 LLMClient.agentic 直连 anthropic 协议（默认）；claude=用 claude CLI 套壳（套 deepseek-v4-flash，套壳层 1-2s/轮 + 协议转换慢）。"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8800
+  }
+}

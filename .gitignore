@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Env & secrets (NEVER commit)
+.env
+.env.*
+!.env.example
+
+# VPN configs (含私钥)
+vpn/
+
+# Luvvv-agent runtime
+workspace/
+metrics/
+logs/
+*.log
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local config overrides
+config.local.json
+dispatch.local.yaml
+dispatch.yaml
+
+# ---- 前端构建产物 ----
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# ---- 构建资源 / 大文件（镜像重建时才需要，不上传）----
+build-assets/
+*.tar.gz
+*.tgz
+
+# ---- 测试会话 / 本地工具 ----
+session-*.json
+.playwright-mcp/
+staged_state/
+第一详细session对话/
+归档.zip
+
+# ---- 训练数据（含 flag 答案，禁止上传）----
+baidu-agent-attack-defense-main/

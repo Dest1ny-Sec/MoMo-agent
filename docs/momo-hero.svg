@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="360" viewBox="0 0 1200 360"
+     role="img" aria-labelledby="title desc">
+  <title id="title">MoMo — 自主安全评估 Agent</title>
+  <desc id="desc">图黑板搜索驱动的自主安全评估 Agent，bootstrap → reason → explore 循环，两轮制调度。</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06070d"/>
+      <stop offset="100%" stop-color="#0c0e1a"/>
+    </linearGradient>
+    <linearGradient id="title-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="360" fill="url(#bg)"/>
+
+  <!-- 背景网格（安全工具 motif） -->
+  <g stroke="#1a1e3a" stroke-width="1" opacity="0.5">
+    <path d="M60 320 H1140 M120 360 V40 M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200" fill="none"/>
+  </g>
+
+  <!-- 左侧标题区 -->
+  <g font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <text x="64" y="150" font-size="92" font-weight="800" fill="url(#title-grad)">MoMo</text>
+    <text x="66" y="198" font-size="28" fill="#e2e6f5" font-weight="600">自主安全评估 Agent</text>
+    <text x="66" y="236" font-size="20" fill="#8a92b8">图黑板搜索 · 两轮制调度 · 证据驱动 · Claude 会话驱动</text>
+
+    <!-- 特性 chips -->
+    <g font-size="15">
+      <rect x="66" y="262" rx="16" width="150" height="30" fill="#101326" stroke="#1a1e3a"/>
+      <text x="141" y="283" fill="#a78bfa" text-anchor="middle">🧭 图黑板推理</text>
+      <rect x="228" y="262" rx="16" width="150" height="30" fill="#101326" stroke="#1a1e3a"/>
+      <text x="303" y="283" fill="#06b6d4" text-anchor="middle">⏱ 两轮制 20min</text>
+      <rect x="390" y="262" rx="16" width="170" height="30" fill="#101326" stroke="#1a1e3a"/>
+      <text x="475" y="283" fill="#10b981" text-anchor="middle">✓ 证据优先防瞎猜</text>
+    </g>
+  </g>
+
+  <!-- 右侧搜索图 motif -->
+  <g transform="translate(700 60)">
+    <!-- origin -->
+    <rect x="0" y="110" rx="10" width="120" height="46" fill="#101326" stroke="#06b6d4" stroke-width="1.5"/>
+    <text x="60" y="138" font-size="14" fill="#06b6d4" text-anchor="middle" font-family="ui-monospace, monospace">origin</text>
+    <!-- intent -->
+    <rect x="170" y="60" rx="10" width="120" height="42" fill="#101326" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="230" y="86" font-size="13" fill="#a78bfa" text-anchor="middle" font-family="ui-monospace, monospace">intent</text>
+    <rect x="170" y="170" rx="10" width="120" height="42" fill="#101326" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="230" y="196" font-size="13" fill="#a78bfa" text-anchor="middle" font-family="ui-monospace, monospace">intent</text>
+    <!-- fact -->
+    <rect x="340" y="100" rx="10" width="120" height="52" fill="#101326" stroke="#10b981" stroke-width="1.5"/>
+    <text x="400" y="124" font-size="13" fill="#10b981" text-anchor="middle" font-family="ui-monospace, monospace">fact</text>
+    <text x="400" y="142" font-size="11" fill="#8a92b8" text-anchor="middle">证据</text>
+    <!-- goal -->
+    <rect x="510" y="95" rx="12" width="130" height="62" fill="url(#title-grad)"/>
+    <text x="575" y="124" font-size="15" fill="#fff" text-anchor="middle" font-weight="700" font-family="ui-monospace, monospace">goal</text>
+    <text x="575" y="144" font-size="11" fill="#f3eefe" text-anchor="middle">FLAG 达成</text>
+
+    <!-- edges -->
+    <g stroke="#1a1e3a" stroke-width="2" fill="none">
+      <path d="M120 133 H170 M290 81 H340 M290 191 H340"/>
+      <path d="M340 126 L510 126" stroke="#10b981" opacity="0.8"/>
+      <path d="M170 102 C260 120 280 140 340 126" stroke="#8b5cf6"/>
+      <path d="M170 191 C260 180 300 170 340 152" stroke="#8b5cf6" opacity="0.6"/>
+    </g>
+  </g>
+</svg>

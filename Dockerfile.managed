@@ -1,0 +1,134 @@
+# Luvvv-agent 托管模式镜像（worker 层升级：cairn 式 claude 会话驱动，无 hermes 依赖）
+# 平台拉起后容器自动开始解题。8核16G 沙箱。
+# worker 用 claude CLI（claude --session-id/-r 会话驱动，超时 conclude 兜底）；
+# 命令直接在容器内跑（镜像内置工具）。
+FROM python:3.11-slim
+
+# 关键：用 ARG 接收空代理（Docker daemon 注入的 HTTP_PROXY=127.0.0.1:7890 在容器内无效，
+# 必须在 ARG 阶段就清掉，否则 ENV http_proxy="" 会被 buildkit 后置 ENV 覆盖）
+ARG http_proxy=
+ARG https_proxy=
+ARG HTTP_PROXY=
+ARG HTTPS_PROXY=
+ARG ftp_proxy=
+ARG FTP_PROXY=
+ARG all_proxy=
+ARG ALL_PROXY=
+ARG no_proxy=*
+# 下载专用代理：本地构建传 --build-arg DOWNLOAD_PROXY=http://host.docker.internal:7890
+# 用宿主 7890（Clash）下载 github/npm 资源；沙箱不传则空→直连+超时兜底。
+ARG DOWNLOAD_PROXY=
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PIP_NO_CACHE_DIR=1
+ENV PYTHONUNBUFFERED=1
+ENV LANG=C.UTF-8
+
+# ===== 1. 装系统渗透工具 =====
+# 关键：Docker daemon 强制注入 HTTP_PROXY=127.0.0.1:7890（clash 端口，沙箱没起），
+# 必须在 RUN 内强制 unset，否则 apt 走不通的代理。
+RUN set -eux \
+    && unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY all_proxy ALL_PROXY ftp_proxy FTP_PROXY \
+    && env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY -u ftp_proxy -u FTP_PROXY \
+        bash -c ' \
+            set -eux \
+            && find /etc/apt -name "*.conf" -exec grep -l "[Pp]roxy" {} + 2>/dev/null | xargs -r rm -f \
+            && sed -i "s|deb.debian.org|mirrors.tuna.tsinghua.edu.cn|g; s|http://|https://|g" /etc/apt/sources.list.d/debian.sources 2>/dev/null || true \
+            && sed -i "s|deb.debian.org|mirrors.tuna.tsinghua.edu.cn|g; s|http://|https://|g" /etc/apt/sources.list 2>/dev/null || true \
+            && apt-get update \
+            && apt-get install -y --no-install-recommends \
+                # === 基础 HTTP / 网络 ===
+                curl wget nmap netcat-openbsd dnsutils \
+                # === Python / 构建 ===
+                python3 python3-pip python3-venv python3-dev git build-essential \
+                # === Web 渗透 ===
+                sqlmap \
+                # === 二进制逆向（关键：二进制的题目必需）===
+                binutils gdb file xxd \
+                # === 解压 / 证书 ===
+                unzip xz-utils ca-certificates \
+            && rm -rf /var/lib/apt/lists/* \
+        '
+
+# ===== 1.5 各维度工具（best-effort，个别缺包不阻塞） =====
+# Web: ffuf gobuster wfuzz dirb(wordlist) | 内网: hydra john hashcat proxychains4 masscan
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ffuf gobuster wfuzz dirb \
+        hydra john hashcat proxychains4 masscan \
+    || echo "⚠ 部分 apt 工具安装失败（跳过）"
+
+# ===== 1.6 Python 库（逆向/利用/云/规避；用 tsinghua 镜像提速） =====
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple \
+        requests pyyaml \
+        pwntools capstone ropper z3-solver yara-python \
+        impacket \
+    || pip install --no-cache-dir requests pyyaml pwntools capstone ropper z3-solver \
+    || echo "部分 pip 安装失败（不阻塞构建）"
+
+# ===== 1.6b+1.7+1.8 工具/知识库：宿主机 7890 代理预下载 → COPY 提取 =====
+# 资源在 build-assets/（构建后可整个删除；.dockerignore 用 !build-assets/** 放行）。
+# 提取后立即清理，避免把原始归档留在镜像里。
+COPY build-assets/ /opt/build-assets/
+RUN set -eux \
+    && cd /opt/build-assets \
+    && (gzip -dc chisel.gz > /usr/local/bin/chisel && chmod +x /usr/local/bin/chisel) || echo "⚠ chisel 缺失（跳过）" \
+    && (unzip -q -o nuclei.zip -d /tmp/nx && mv /tmp/nx/nuclei /usr/local/bin/nuclei) || echo "⚠ nuclei 缺失（跳过）" \
+    && (unzip -q -o httpx.zip -d /tmp/hx && mv /tmp/hx/httpx /usr/local/bin/httpx) || echo "⚠ httpx 缺失（跳过）" \
+    && (gzip -dc dalfox.gz > /usr/local/bin/dalfox && chmod +x /usr/local/bin/dalfox) || echo "⚠ dalfox 缺失（跳过）" \
+    && (unzip -q -o cloudfox.zip -d /tmp/cf && mv /tmp/cf/cloudfox/cloudfox /usr/local/bin/cloudfox) || echo "⚠ cloudfox 缺失（跳过）" \
+    && mkdir -p /opt/PayloadsAllTheThings /opt/InternalAllTheThings \
+    && (tar -xzf payloads.tar.gz -C /opt/PayloadsAllTheThings --strip-components=1) || echo "⚠ PayloadsAllTheThings 缺失" \
+    && (tar -xzf internal.tar.gz -C /opt/InternalAllTheThings --strip-components=1) || echo "⚠ InternalAllTheThings 缺失" \
+    && rm -rf /tmp/nx /tmp/hx /tmp/cf /tmp/dalfox-linux-amd64 /tmp/dalfox-extract \
+    && rm -rf /opt/build-assets
+
+# ===== 2. Claude Code CLI（worker，cairn 式 session+conclude 驱动；走 ANTHROPIC_* 网关）=====
+# 运行时 ANTHROPIC_BASE_URL/AUTH_TOKEN/MODEL 由平台注入，claude CLI 直接读环境变量。
+# 用 Node 22 官方二进制（claude-code 要求 node>=22；Debian 的 nodejs 只有 20，会有 EBADENGINE）。
+RUN set -eux \
+    && unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY all_proxy ALL_PROXY ftp_proxy FTP_PROXY \
+    && env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY -u ftp_proxy -u FTP_PROXY \
+        bash -c ' \
+            set -eux \
+            && export http_proxy="$DOWNLOAD_PROXY" https_proxy="$DOWNLOAD_PROXY" \
+            && curl -fsSL --max-time 600 -o /tmp/node22.tar.xz "https://nodejs.org/dist/v22.13.0/node-v22.13.0-linux-x64.tar.xz" \
+            && tar -xJf /tmp/node22.tar.xz -C /usr/local --strip-components=1 \
+            && rm -f /tmp/node22.tar.xz \
+            && npm config set registry https://registry.npmmirror.com \
+            && timeout 900 npm install -g @anthropic-ai/claude-code \
+        ' || echo "⚠ claude CLI 安装失败（worker 可回退 api 直连）"
+# 验证（失败不阻塞 build；运行时 worker_fallback 兜底回 api）
+RUN claude --version 2>/dev/null || echo "⚠ claude CLI 不可用（回退 api worker）"
+ENV CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+
+# ===== 3. Luvvv-agent 主程序 =====
+WORKDIR /app
+COPY . /app
+# build-assets 是构建资源，不进运行镜像
+RUN rm -rf /app/build-assets /app/knowledge
+# 工具手册：AI 决策时 cat /opt/tools.md 查有哪些工具 + 参数
+COPY solver/tools.md /opt/tools.md
+# 解题知识库（同类题打法，不含 flag）：solver 先查 /opt/ctf-knowledge/ 复用打法
+COPY knowledge/ /opt/ctf-knowledge/
+
+# 装依赖（requests + pyyaml）
+RUN pip install -r /app/requirements.txt 2>/dev/null || pip install requests pyyaml 2>/dev/null || true
+
+RUN chmod +x /app/entrypoint.sh
+
+# ===== 3.5 非 root 用户运行（关键修复）=====
+# claude CLI 出于安全拒绝 root/sudo 下用 --dangerously-skip-permissions（会 rc=1），
+# 而 SessionWorker 必须靠它让 claude 自主跑 bash。用非 root 用户跑整个 orchestrator，
+# claude 会话文件落到 /home/ctf/.claude。已实测：非 root + skip-permissions + bash 工具可用。
+RUN useradd -m -s /bin/bash ctf \
+    && chown -R ctf:ctf /app
+
+# ===== 3. 托管模式默认环境 =====
+ENV LUVVV_MODEL_PROVIDER=anthropic
+ENV LUVVV_ADAPTER=tsec
+
+USER ctf
+
+# ===== 4. 入口 =====
+ENTRYPOINT ["/app/entrypoint.sh"]
