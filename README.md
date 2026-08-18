@@ -7,7 +7,7 @@
 
 <!-- 暗紫底：打字机 + 关键指标 -->
 <div style="background: #0a0118; padding: 32px 40px; border-radius: 0 0 16px 16px; margin: -8px 0 24px 0; text-align: center;">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=24&weight=600&duration=2800&pause=1800&color=00D4AA&center=true&vCenter=true&repeat=true&width=900&height=60&lines=%E5%9B%BE%E9%BB%91%E6%9D%BF%E6%90%9C%E7%B4%A2%20%F0%9F%93%8D;%E8%87%AA%E4%B8%BB%E8%A7%A3%E9%A2%98%20%F0%9F%A4%96;%E8%AF%81%E6%8D%AE%E9%A9%B1%E5%8A%A8%E9%98%B2%E8%B0%93%20%F0%9F%9B%A1%EF%B8%8F;CTF%20%E2%9A%94%EF%B8%8F%20%E6%BC%8F%E6%B4%9E%E8%AF%84%E4%BC%B0%20%F0%9F%94%8D" alt="" />
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=24&weight=600&duration=2800&pause=1800&color=00D4AA&center=true&vCenter=true&repeat=true&width=900&height=60&lines=%E5%9B%BE%E9%BB%91%E6%9D%BF%E6%90%9C%E7%B4%A2;%E8%87%AA%E4%B8%BB%E8%A7%A3%E9%A2%98;%E8%AF%81%E6%8D%AE%E9%A9%B1%E5%8A%A8%E9%98%B2%E8%B0%93;CTF%20%E6%BC%8F%E6%B4%9E%E8%AF%84%E4%BC%B0" alt="" />
   <p style="color: #FFB3D9; font-size: 14px; letter-spacing: 3px; font-family: 'Fira Code', monospace; margin: 12px 0 0; font-weight: 300;">
     <strong style="color: #fff;">2</strong> 轮调度 &nbsp;·&nbsp; <strong style="color: #fff;">N</strong> 工具协同 &nbsp;·&nbsp; <strong style="color: #fff;">100%</strong> 证据驱动 &nbsp;·&nbsp; <strong style="color: #fff;">0</strong> 幻觉
   </p>
