@@ -1,13 +1,13 @@
 <div align="center">
 
-<!-- Banner: 暗紫渐变 + 标题 + 副标题 -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0118,30:3A0CA3,70:7B2CBF,100:FF006E&height=240&section=header&text=MoMo-agent&fontSize=72&fontColor=ffffff&fontAlignY=40&desc=%E5%9B%BE%E9%BB%91%E6%9D%BF%E6%90%9C%E7%B4%A2%E9%A9%B1%E5%8A%A8%E7%9A%84%E8%87%AA%E4%B8%BB%E5%AE%89%E5%85%A8%E8%AF%84%E4%BC%B0%20Agent&descSize=18&descColor=00D4AA&animation=twinkling" />
+<!-- Banner: 深空 AI（深紫→深蓝→紫罗兰→粉） + waving -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0118,30:240046,70:7B2CBF,100:FF6BCB&height=240&section=header&text=MoMo-agent&fontSize=72&fontColor=ffffff&fontAlignY=40&desc=%E5%9B%BE%E9%BB%91%E6%9D%BF%E6%90%9C%E7%B4%A2%E9%A9%B1%E5%8A%A8%E7%9A%84%E8%87%AA%E4%B8%BB%E5%AE%89%E5%85%A8%E8%AF%84%E4%BC%B0%20Agent&descSize=18&descColor=FF6BCB&animation=twinkling" />
 
 <br/>
 
 <!-- 暗紫底：打字机 + 关键指标 -->
 <div style="background: #0a0118; padding: 32px 40px; border-radius: 0 0 16px 16px; margin: -8px 0 24px 0; text-align: center;">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=24&weight=600&duration=2800&pause=1800&color=00D4AA&center=true&vCenter=true&repeat=true&width=900&height=60&lines=%E5%9B%BE%E9%BB%91%E6%9D%BF%E6%90%9C%E7%B4%A2;%E8%87%AA%E4%B8%BB%E8%A7%A3%E9%A2%98;%E8%AF%81%E6%8D%AE%E9%A9%B1%E5%8A%A8%E9%98%B2%E8%B0%93;CTF%20%E6%BC%8F%E6%B4%9E%E8%AF%84%E4%BC%B0" alt="" />
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=24&weight=600&duration=2800&pause=1800&color=FF6BCB&center=true&vCenter=true&repeat=true&width=900&height=60&lines=%E5%9B%BE%E9%BB%91%E6%9D%BF%E6%90%9C%E7%B4%A2;%E8%87%AA%E4%B8%BB%E8%A7%A3%E9%A2%98;%E8%AF%81%E6%8D%AE%E9%A9%B1%E5%8A%A8%E9%98%B2%E8%B0%93;CTF%20%E6%BC%8F%E6%B4%9E%E8%AF%84%E4%BC%B0" alt="" />
   <p style="color: #FFB3D9; font-size: 14px; letter-spacing: 3px; font-family: 'Fira Code', monospace; margin: 12px 0 0; font-weight: 300;">
     <strong style="color: #fff;">2</strong> 轮调度 &nbsp;·&nbsp; <strong style="color: #fff;">N</strong> 工具协同 &nbsp;·&nbsp; <strong style="color: #fff;">100%</strong> 证据驱动 &nbsp;·&nbsp; <strong style="color: #fff;">0</strong> 幻觉
   </p>
