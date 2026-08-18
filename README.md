@@ -1,6 +1,11 @@
-<p align="center">
-  <img src="docs/momo-hero.svg" width="100%" alt="MoMo — 自主安全评估 Agent" />
-</p>
+<div align="center">
+
+<!-- Banner: 暗紫渐变 + 标题 + 副标题 -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0118,30:3A0CA3,70:7B2CBF,100:FF006E&height=240&section=header&text=MoMo-agent&fontSize=72&fontColor=ffffff&fontAlignY=40&desc=%E5%9B%BE%E9%BB%91%E6%9D%BF%E6%90%9C%E7%B4%A2%E9%A9%B1%E5%8A%A8%E7%9A%84%E8%87%AA%E4%B8%BB%E5%AE%89%E5%85%A8%E8%AF%84%E4%BC%B0%20Agent&descSize=18&descColor=00D4AA&animation=twinkling" />
+
+<br/>
+
+</div>
 
 <p align="center">
   <b>图黑板搜索驱动的自主安全评估 Agent</b><br/>
@@ -8,10 +13,18 @@
 </p>
 
 <p align="center">
-  <a href="http://59.110.23.216:13231/demo.html"><img src="https://img.shields.io/badge/在线演示-Online%20Demo-%238b5cf6" alt="在线演示"/></a>
-  <a href="#-架构"><img src="https://img.shields.io/badge/架构-图黑板%20搜索-%2306b6d4" alt="架构"/></a>
-  <a href="#-快速开始"><img src="https://img.shields.io/badge/快速开始-mock%20模式-%2310b981" alt="快速开始"/></a>
+  <a href="https://github.com/Dest1ny-Sec/MoMo-agent/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Dest1ny-Sec/MoMo-agent?style=flat-square&color=7B2CBF&labelColor=0d1117" alt="License" /></a>
+  <a href="https://github.com/Dest1ny-Sec/MoMo-agent/stargazers"><img src="https://img.shields.io/github/stars/Dest1ny-Sec/MoMo-agent?style=flat-square&color=FF006E&labelColor=0d1117" alt="Stars" /></a>
+  <a href="https://github.com/Dest1ny-Sec/MoMo-agent/actions"><img src="https://img.shields.io/github/actions/workflow/status/Dest1ny-Sec/MoMo-agent/ci.yml?style=flat-square&color=00D4AA&labelColor=0d1117&label=CI" alt="CI" /></a>
+  <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white&labelColor=0d1117" alt="Python" /></a>
+  <a href="http://59.110.23.216:13231/demo.html"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E6%BC%94%E7%A4%BA-Demo-8B5CF6?style=flat-square&labelColor=0d1117" alt="Demo" /></a>
 </p>
+
+<br/>
+
+---
+
+> 🔗 **在线演示**：http://59.110.23.216:13231/demo.html
 
 ---
 

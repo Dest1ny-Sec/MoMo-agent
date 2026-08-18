@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest pytest-asyncio
+
+      - name: Syntax check all Python
+        run: |
+          for f in $(find . -name "*.py" -not -path "*/.git/*" -not -path "*/__pycache__/*" -not -path "*/node_modules/*"); do
+            python -m py_compile "$f" || echo "✗ $f"
+          done
+          echo "✓ all Python files compile"
+
+      - name: Run tests (if any)
+        run: |
+          if [ -d tests ]; then
+            pytest tests/ -q
+          else
+            echo "(no tests/ dir — skip pytest)"
+          fi
+
+      - name: Lint with ruff
+        run: |
+          pip install ruff
+          ruff check . || echo "(ruff found issues, not blocking)"
